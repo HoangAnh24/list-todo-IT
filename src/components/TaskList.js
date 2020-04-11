@@ -3,6 +3,10 @@ import ItemList from './ItemList'
 
 class TaskList extends Component {
     render() {
+        let { listTasks } = this.props; 
+        let itemTask = listTasks.map((task,index) => {
+            return <ItemList key={index} task={ task } index={index} />;
+        });
         return (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <table className="table table-bordered table-hover">
@@ -14,22 +18,8 @@ class TaskList extends Component {
                             <th className="text-center">Hành Động</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td />
-                            <td>
-                                <input type="text" className="form-control" />
-                            </td>
-                            <td>
-                                <select className="form-control">
-                                    <option value={-1}>Tất Cả</option>
-                                    <option value={0}>Ẩn</option>
-                                    <option value={1}>Kích Hoạt</option>
-                                </select>
-                            </td>
-                            <td />
-                        </tr>
-                        <ItemList />
+                    <tbody> 
+                        { itemTask }
                     </tbody>
                 </table>
             </div>
