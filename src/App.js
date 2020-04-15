@@ -29,17 +29,17 @@ class App extends Component {
       {
         id: randomstring.generate(),
         name: "học lập trình PHP",
-        status: true,
+        status: 0,
       },
       {
         id: randomstring.generate(),
         name: "học lập trình ASP",
-        status: false,
+        status: 1,
       },
       {
         id: randomstring.generate(),
         name: "học lập trình Python",
-        status: true,
+        status: 0,
       },
     ];
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -57,9 +57,23 @@ class App extends Component {
     });
   }
 
+  onSubmit = (data) => { 
+    let { tasks } = this.state;
+    let task = {
+      id : randomstring.generate(),
+      name : data.name,
+      status : parseInt(data.status)
+    }
+    tasks.push(task);
+    this.setState({
+      tasks : tasks
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks)); 
+  }
+
   render() {
     const { tasks, isDisPlayForm } = this.state;
-    var elmTaskForm = isDisPlayForm ? <TaskForm onCloseForm={this.onCloseForm} /> : '';
+    var elmTaskForm = isDisPlayForm ? <TaskForm onSubmit={this.onSubmit} onCloseForm={this.onCloseForm} /> : '';
     return (
       <div className="container">
         <div className="text-center">
