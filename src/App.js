@@ -29,17 +29,17 @@ class App extends Component {
       {
         id: randomstring.generate(),
         name: "học lập trình PHP",
-        status: 0,
+        status: true,
       },
       {
         id: randomstring.generate(),
         name: "học lập trình ASP",
-        status: 1,
+        status: false,
       },
       {
         id: randomstring.generate(),
         name: "học lập trình Python",
-        status: 0,
+        status: true,
       },
     ];
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -62,13 +62,49 @@ class App extends Component {
     let task = {
       id : randomstring.generate(),
       name : data.name,
-      status : parseInt(data.status)
+      status : Boolean(data.status)
     }
     tasks.push(task);
     this.setState({
       tasks : tasks
     });
     localStorage.setItem('tasks', JSON.stringify(tasks)); 
+  }
+
+  onUpdateStatus = (id) => {
+    let { tasks } = this.state; 
+    let index = this.findIndex(id); 
+    if(index !== -1) {
+      tasks[index].status = !tasks[index].status;
+      this.setState({
+        tasks : tasks
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks)); 
+    }
+  }
+
+  findIndex(id) {
+    let { tasks } = this.state;
+    let result = -1;
+    tasks.forEach((task,index) => {  
+      if(task.id === id) {
+        result = index;
+      }   
+    }); 
+    return result;
+  }
+
+  onRemove = (id) => {
+    let { tasks } = this.state; 
+    let index = this.findIndex(id); 
+    if(index !== -1) { 
+      tasks = tasks.filter((task) => 
+        task.id !== id );
+      this.setState({
+        tasks : tasks
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks)); 
+    }
   }
 
   render() {
@@ -93,7 +129,7 @@ class App extends Component {
             </button>
             <ConTrol />
             <div className="row mt-15">
-              <TaskList listTasks={tasks} />
+              <TaskList listTasks={tasks} onUpdateStatus={this.onUpdateStatus} onRemove={this.onRemove}/>
             </div>
           </div>
         </div>

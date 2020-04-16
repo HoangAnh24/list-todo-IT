@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ItemList from './ItemList'
 
-class TaskList extends Component {
+class TaskList extends Component { 
+
     render() {
         let { listTasks } = this.props; 
         let itemTask = listTasks.map((task,index) => {
-            return <ItemList key={index} task={ task } index={index} />;
+            return <ItemList key={index} task={ task } index={index} onUpdateStatus={this.props.onUpdateStatus} onRemove={this.props.onRemove}  />;
         });
         return (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
