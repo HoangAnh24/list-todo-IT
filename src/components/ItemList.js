@@ -9,6 +9,10 @@ class ItemList extends Component {
         this.props.onRemove(this.props.task.id);
     }
 
+    onUpdate = () => {
+        this.props.onUpdate(this.props.task.id);
+    }
+
     render() {
         let { task,index } = this.props;  
         return (
@@ -19,7 +23,7 @@ class ItemList extends Component {
                     <span onClick={this.onUpdateStatus} className={ task.status ? 'label label-success' : 'label label-warning' }> { task.status  ? 'Kích Hoạt' : 'Ẩn' }  </span>
                 </td>
                 <td className="text-center">
-                    <button type="button" className="btn btn-warning">
+                    <button type="button" className="btn btn-warning" onClick={this.onUpdate}>
                         <span className="fa fa-pencil mr-5" />Sửa
                     </button>
                     &nbsp;

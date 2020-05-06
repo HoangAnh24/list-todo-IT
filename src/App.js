@@ -11,6 +11,13 @@ class App extends Component {
     this.state = {
       tasks: [],
       isDisPlayForm: false,
+      filter : {
+        filterName : "",
+        filterStatus: -1
+      },
+      sortBy : 'name',
+      sortValue : 1,
+      keyword : ""
     }
   }
   componentWillMount() {
@@ -46,9 +53,18 @@ class App extends Component {
   }
 
   showTaskForm = () => {
-    this.setState({
-      isDisPlayForm: this.state.isDisPlayForm ? false : true
-    });
+    if (this.state.isDisPlayForm && this.state.taskEditing
+      !== null) {
+      this.setState({
+        isDisPlayForm: true,
+        taskEditing: null
+      });
+    } else { 
+      this.setState({
+        isDisPlayForm: this.state.isDisPlayForm ? false : true,
+        taskEditing: null
+      });
+    }
   }
 
   onCloseForm = () => {
@@ -57,59 +73,148 @@ class App extends Component {
     });
   }
 
-  onSubmit = (data) => { 
-    let { tasks } = this.state;
-    let task = {
-      id : randomstring.generate(),
-      name : data.name,
-      status : Boolean(data.status)
-    }
-    tasks.push(task);
+  onShowForm = () => {
     this.setState({
-      tasks : tasks
+      isDisPlayForm: true
     });
-    localStorage.setItem('tasks', JSON.stringify(tasks)); 
+  }
+
+  onSubmit = (data) => {
+    let { tasks } = this.state;
+    if (data.id === '') {
+      let task = {
+        id: randomstring.generate(),
+        name: data.name,
+        status: Boolean(data.status)
+      };
+      tasks.push(task);
+    } else {
+      var index = this.findIndex(data.id);
+      tasks[index] = data;
+    }
+    this.setState({
+      tasks: tasks,
+      taskEditing: null
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
   }
 
   onUpdateStatus = (id) => {
-    let { tasks } = this.state; 
-    let index = this.findIndex(id); 
-    if(index !== -1) {
+    let { tasks } = this.state;
+    let index = this.findIndex(id);
+    if (index !== -1) {
       tasks[index].status = !tasks[index].status;
       this.setState({
-        tasks : tasks
+        tasks: tasks
       });
-      localStorage.setItem('tasks', JSON.stringify(tasks)); 
+      localStorage.setItem('tasks', JSON.stringify(tasks));
     }
   }
 
   findIndex(id) {
     let { tasks } = this.state;
     let result = -1;
-    tasks.forEach((task,index) => {  
-      if(task.id === id) {
+    tasks.forEach((task, index) => {
+      if (task.id === id) {
         result = index;
-      }   
-    }); 
+      }
+    });
     return result;
   }
 
   onRemove = (id) => {
-    let { tasks } = this.state; 
-    let index = this.findIndex(id); 
-    if(index !== -1) { 
-      tasks = tasks.filter((task) => 
-        task.id !== id );
+    let { tasks } = this.state;
+    let index = this.findIndex(id);
+    if (index !== -1) {
+      tasks = tasks.filter((task) =>
+        task.id !== id);
       this.setState({
-        tasks : tasks
+        tasks: tasks
       });
-      localStorage.setItem('tasks', JSON.stringify(tasks)); 
+      localStorage.setItem('tasks', JSON.stringify(tasks));
     }
   }
 
+  onUpdate = (id) => {
+    let { tasks } = this.state;
+    let index = this.findIndex(id);
+    let taskEditing = tasks[index];
+    this.setState({
+      taskEditing: taskEditing
+    });;
+    this.onShowForm();
+  }
+
+  onFilter= (filterName,filterStatus) => {
+      console.log(filterName + " " + filterStatus);
+      filterStatus = parseInt(filterStatus);
+      this.setState({
+        filter : {
+          filterName : filterName.toLowerCase(),
+          filterStatus : filterStatus
+        }
+      });
+  }
+
+  onSearch = (keyword) => {
+    this.setState({
+      keyword : keyword
+    });
+  }
+
+  onSort = (sortBy,sortValue) => {
+    this.setState({ 
+      sortBy : sortBy,
+      sortValue : sortValue 
+    });
+    console.log(sortBy,sortValue);
+  }
+
   render() {
-    const { tasks, isDisPlayForm } = this.state;
-    var elmTaskForm = isDisPlayForm ? <TaskForm onSubmit={this.onSubmit} onCloseForm={this.onCloseForm} /> : '';
+    let { tasks, isDisPlayForm, taskEditing, filter, keyword,sortBy,sortValue } = this.state;
+    if(filter) {
+      if(filter.filterName) {
+        tasks = tasks.filter((task) => {
+          return task.name.toLowerCase().indexOf(filter.filterName) !== -1;
+        });
+      }
+      // if(filter.filterStatus) {
+        tasks = tasks.filter((task) => {
+          if(filter.filterStatus === -1) {
+            return tasks;
+          } else {
+            return task.status === (filter.filterStatus === 1 ? true : false); 
+          }
+        });
+      // }
+    }
+    if(keyword) {
+      tasks = tasks.filter((task) => {
+        return task.name.toLowerCase().indexOf(keyword) !== -1;
+      });
+    }
+    if(sortBy==='name') {
+      tasks.sort((a,b) => {
+        if(a.name > b.name) {
+          return -sortValue;
+        } else if(a.name < b.name) {
+          return sortValue;
+        } else {
+          return 0;
+        }
+      })
+    } else {
+      tasks.sort((a,b) => {
+        if(a.status > b.status) {
+          return -sortValue;
+        } else if(a.status < b.status) {
+          return sortValue;
+        } else {
+          return 0;
+        }
+      })
+    }
+    var elmTaskForm = isDisPlayForm ? <TaskForm onSubmit={this.onSubmit} onCloseForm={this.onCloseForm} task={taskEditing} /> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -127,9 +232,9 @@ class App extends Component {
             <button type="button" className="btn btn-primary mb-15" onClick={this.onGenerateData}>
               Generate data
             </button>
-            <ConTrol />
+            <ConTrol onSearch={this.onSearch} onSort={this.onSort} sortBy={sortBy} sortValue={sortValue} />
             <div className="row mt-15">
-              <TaskList listTasks={tasks} onUpdateStatus={this.onUpdateStatus} onRemove={this.onRemove}/>
+              <TaskList listTasks={tasks} onUpdateStatus={this.onUpdateStatus} onRemove={this.onRemove} onUpdate={this.onUpdate} onFilter = {this.onFilter} />
             </div>
           </div>
         </div>

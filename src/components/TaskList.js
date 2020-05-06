@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
 import ItemList from './ItemList'
 
-class TaskList extends Component { 
+class TaskList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            filterName: '',
+            filterStatus: -1
+        }
+    }
+
+    onChange = (event) => {
+        let target = event.target;
+        let name = target.name;
+        let value = target.value;
+        this.props.onFilter(
+            name === 'filterName' ? value : this.state.filterName,
+            name === 'filterStatus' ? value : this.state.filterStatus
+        );
+        this.setState({
+            [name]: value
+        });
+
+    }
 
     render() {
-        let { listTasks } = this.props; 
-        let itemTask = listTasks.map((task,index) => {
-            return <ItemList key={index} task={ task } index={index} onUpdateStatus={this.props.onUpdateStatus} onRemove={this.props.onRemove}  />;
+        let { listTasks } = this.props;
+        let { filterName, filterstatus } = this.state;
+        let itemTask = listTasks.map((task, index) => {
+            return <ItemList key={index} task={task} index={index} onUpdateStatus={this.props.onUpdateStatus} onRemove={this.props.onRemove} onUpdate={this.props.onUpdate} />;
         });
         return (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -19,8 +41,22 @@ class TaskList extends Component {
                             <th className="text-center">Hành Động</th>
                         </tr>
                     </thead>
-                    <tbody> 
-                        { itemTask }
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="text" className="form-control" name="filterName" onChange={this.onChange}/>
+                            </td>
+                            <td>
+                                <select className="form-control" name="filterStatus" onChange={this.onChange}>
+                                    <option value="-1">Tất Cả</option>
+                                    <option value="0">Ẩn</option>
+                                    <option value="1">Kích Hoạt</option>
+                                </select>
+                            </td>
+                            <td></td>
+                        </tr>
+                        {itemTask}
                     </tbody>
                 </table>
             </div>

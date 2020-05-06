@@ -4,14 +4,42 @@ class TaskForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id : "",
             name: "",
             status: 0
         };
     }
 
+    componentWillMount() {
+        if(this.props.task){
+            this.setState({
+                id : this.props.task.id,
+                name : this.props.task.name,
+                status : this.props.task.status,
+            });
+        }
+    }
+
+    componentWillReceiveProps(nextprops) {
+        if(nextprops && nextprops.task){
+            this.setState({
+                id : nextprops.task.id,
+                name : nextprops.task.name,
+                status : nextprops.task.status,
+            });
+        } else if (!nextprops.task) {
+            this.setState({
+                id : "",
+                name: "",
+                status: 0
+            });
+        }
+    }
+
     exitForm = () => {
         this.props.onCloseForm();
     }
+
     onChange = (event) => {
         var target = event.target;
         var name = target.name;
@@ -36,10 +64,11 @@ class TaskForm extends Component {
     }
 
     render() {
+        let { id } = this.state;
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
-                    <h3 className="panel-title">Thêm Công Việc <span className="fa fa-times-circle pull-right" onClick={this.exitForm}></span></h3>
+        <h3 className="panel-title">{ !id ?  'Thêm Công Việc' : 'Sua cong viec' } <span className="fa fa-times-circle pull-right" onClick={this.exitForm}></span></h3>
                 </div>
                 <div className="panel-body">
                     <form onSubmit={this.onSubmit}>

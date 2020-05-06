@@ -52,3 +52,8 @@
 .mr-5 {
   margin-right: 5px;
 }
+
+.select_sort::after {
+  content: '\f00c';
+  font-family: 'FontAwesome';
+}
