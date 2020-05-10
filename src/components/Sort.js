@@ -4,10 +4,8 @@ class Sort extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            sort : {
-                by : 'name',
-                value : 1
-            }
+            sortBy : 'name',
+            sortValue : 1
         }
     }
     
