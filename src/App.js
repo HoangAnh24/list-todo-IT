@@ -146,7 +146,6 @@ class App extends Component {
   }
 
   onFilter= (filterName,filterStatus) => {
-      console.log(filterName + " " + filterStatus);
       filterStatus = parseInt(filterStatus);
       this.setState({
         filter : {
@@ -167,7 +166,6 @@ class App extends Component {
       sortBy : sortBy,
       sortValue : sortValue 
     });
-    console.log(sortBy,sortValue);
   }
 
   render() {
