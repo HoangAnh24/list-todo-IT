@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import ItemList from './ItemList'
+import ItemList from './ItemList';
+import { connect } from "react-redux";
 
 class TaskList extends Component {
     constructor(props) {
@@ -28,7 +29,7 @@ class TaskList extends Component {
         let { listTasks } = this.props;
         // let { filterName, filterstatus } = this.state;
         let itemTask = listTasks.map((task, index) => {
-            return <ItemList key={index} task={task} index={index} onUpdateStatus={this.props.onUpdateStatus} onRemove={this.props.onRemove} onUpdate={this.props.onUpdate} />;
+            return <ItemList key={index} task={task} index={index} onUpdate={this.props.onUpdate} />;
         });
         return (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -64,4 +65,10 @@ class TaskList extends Component {
     }
 }
 
-export default TaskList;
+const mapStateToProps = (state) => {
+  return {
+      listTasks : state.tasks
+  }
+};
+
+export default connect( mapStateToProps,null, )(TaskList);
