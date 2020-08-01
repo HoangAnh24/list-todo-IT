@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="wrapper">
+    <h1 id="title"></h1>
+    <p id="description"></p>
+    <form id="survey-form">
+        <label for="name" id="name-label"></label>
+        <input type="text" name="name" id="name" required>
+        <label for="email" id="email-label"></label>
+        <input type="email" name="email" id="email" required>
+        <label for="number" id="number-label"></label>
+        <input type="number" name="number" id="number" min="5" max="10">
+        <select name="dropdown" id="dropdown">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <textarea name="text" id="text" cols="30" rows="10"></textarea>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+</body>
+</html>
