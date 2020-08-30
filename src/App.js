@@ -45,17 +45,7 @@ class App extends Component {
  
 
   showTaskForm = () => {
-    var { itemEditing } = this.props;
-    if(itemEditing && itemEditing.id !== '') {
-      this.props.onOpenForm(); 
-    } else {
-      this.props.onToggleForm();
-    }
-    this.props.onClearTask({ 
-        id : "",
-        name : "",
-        status: "false" 
-    });
+    this.props.onToggleForm();
   }
 
   onShowForm = () => {
@@ -192,8 +182,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isDisplayForm : state.isDisplayForm,
-    itemEditing : state.itemEditing
+    isDisplayForm : state.isDisplayForm
   };
 }
 
