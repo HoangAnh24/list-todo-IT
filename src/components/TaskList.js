@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ItemList from './ItemList';
 import { connect } from "react-redux";
+import * as action from "./../actions/index";
 
 class TaskList extends Component {
     constructor(props) {
@@ -15,10 +16,11 @@ class TaskList extends Component {
         let target = event.target;
         let name = target.name;
         let value = target.value;
-        this.props.onFilter(
-            name === 'filterName' ? value : this.state.filterName,
-            name === 'filterStatus' ? value : this.state.filterStatus
-        );
+        let filter = {
+            name: name === 'filterName' ? value : this.state.filterName,
+            status:  name === 'filterStatus' ? value : this.state.filterStatus
+        };
+        this.props.onFliterTable(filter);
         this.setState({
             [name]: value
         });
@@ -26,11 +28,26 @@ class TaskList extends Component {
     }
 
     render() {
-        let { listTasks } = this.props;
-        // let { filterName, filterstatus } = this.state;
+        let { listTasks, filterTable } = this.props;
+        if(filterTable.name) {
+            listTasks = listTasks.filter((task) => {
+            return task.name.toLowerCase().indexOf(filterTable.name) !== -1;
+          });
+        }
+
+        listTasks = listTasks.filter((task) => {
+            if(filterTable.status === -1) {
+                return listTasks;
+            } else {
+            return task.status === (filterTable.status === 1 ? true : false);
+            }
+        });
+
         let itemTask = listTasks.map((task, index) => {
             return <ItemList key={index} task={task} index={index} onUpdate={this.props.onUpdate} />;
         });
+
+        
         return (
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <table className="table table-bordered table-hover">
@@ -67,8 +84,17 @@ class TaskList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      listTasks : state.tasks
+      listTasks : state.tasks,
+      filterTable: state.filterTable
   }
 };
 
-export default connect( mapStateToProps,null, )(TaskList);
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        onFliterTable: (filter) =>  {
+            dispatch(action.filterTask(filter));
+        }
+    };
+  }
+
+export default connect( mapStateToProps,mapDispatchToProps)(TaskList);

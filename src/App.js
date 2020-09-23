@@ -11,10 +11,6 @@ class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      filter : {
-        filterName : "",
-        filterStatus: -1
-      },
       sortBy : 'name',
       sortValue : 1,
       keyword : ""
@@ -84,16 +80,6 @@ class App extends Component {
     this.onShowForm();
   }
 
-  onFilter= (filterName,filterStatus) => {
-      filterStatus = parseInt(filterStatus);
-      this.setState({
-        filter : {
-          filterName : filterName.toLowerCase(),
-          filterStatus : filterStatus
-        }
-      });
-  }
-
   onSearch = (keyword) => {
     this.setState({
       keyword : keyword
@@ -108,24 +94,9 @@ class App extends Component {
   }
 
   render() {
-    let { filter, sortBy,sortValue } = this.state;
+    let { sortBy,sortValue } = this.state;
     let { isDisplayForm } = this.props;
-    if(filter) {
-      // if(filter.filterName) {
-      //   tasks = tasks.filter((task) => {
-      //     return task.name.toLowerCase().indexOf(filter.filterName) !== -1;
-      //   });
-      // }
-      // if(filter.filterStatus) {
-      //   tasks = tasks.filter((task) => {
-      //     if(filter.filterStatus === -1) {
-      //       return tasks;
-      //     } else {
-      //       return task.status === (filter.filterStatus === 1 ? true : false);
-      //     }
-      //   });
-      // }
-    }
+    
     // if(keyword) {
     //   tasks = tasks.filter((task) => {
     //     return task.name.toLowerCase().indexOf(keyword) !== -1;
@@ -171,7 +142,7 @@ class App extends Component {
             </button>
             <ConTrol onSearch={this.onSearch} onSort={this.onSort} sortBy={sortBy} sortValue={sortValue} />
             <div className="row mt-15">
-              <TaskList onUpdateStatus={this.onUpdateStatus} onUpdate={this.onUpdate} onFilter = {this.onFilter} />
+              <TaskList onUpdateStatus={this.onUpdateStatus} onUpdate={this.onUpdate}/>
             </div>
           </div>
         </div>

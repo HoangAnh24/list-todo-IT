@@ -25,7 +25,7 @@ class ItemList extends Component {
                 <td className="text-center">{ ++index  }</td>
                 <td>{ task.name }</td>
                 <td className="text-center"> 
-                    <span onClick={this.onUpdateStatus} className={ task.status === 'true' ? 'label label-success' : 'label label-warning' }> { task.status === 'true' ? 'Kích Hoạt' : 'Ẩn' }  </span>
+                    <span onClick={this.onUpdateStatus} className={ task.status === true ? 'label label-success' : 'label label-warning' }> { task.status === true ? 'Kích Hoạt' : 'Ẩn' }  </span>
                 </td>
                 <td className="text-center">
                     <button type="button" className="btn btn-warning" onClick={this.onEditTask}>
