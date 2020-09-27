@@ -13,7 +13,6 @@ class App extends Component {
     this.state = {
       sortBy : 'name',
       sortValue : 1,
-      keyword : ""
     }
   }
 
@@ -80,12 +79,6 @@ class App extends Component {
     this.onShowForm();
   }
 
-  onSearch = (keyword) => {
-    this.setState({
-      keyword : keyword
-    });
-  }
-
   onSort = (sortBy,sortValue) => {
     this.setState({ 
       sortBy : sortBy,
@@ -94,35 +87,8 @@ class App extends Component {
   }
 
   render() {
-    let { sortBy,sortValue } = this.state;
     let { isDisplayForm } = this.props;
     
-    // if(keyword) {
-    //   tasks = tasks.filter((task) => {
-    //     return task.name.toLowerCase().indexOf(keyword) !== -1;
-    //   });
-    // }
-    // if(sortBy==='name') {
-    //   tasks.sort((a,b) => {
-    //     if(a.name > b.name) {
-    //       return -sortValue;
-    //     } else if(a.name < b.name) {
-    //       return sortValue;
-    //     } else {
-    //       return 0;
-    //     }
-    //   })
-    // } else {
-    //   tasks.sort((a,b) => {
-    //     if(a.status > b.status) {
-    //       return -sortValue;
-    //     } else if(a.status < b.status) {
-    //       return sortValue;
-    //     } else {
-    //       return 0;
-    //     }
-    //   })
-    // }
     return (
       <div className="container">
         <div className="text-center">
@@ -140,7 +106,7 @@ class App extends Component {
             <button type="button" className="btn btn-primary mb-15" onClick={this.onGenerateData}>
               Generate data
             </button>
-            <ConTrol onSearch={this.onSearch} onSort={this.onSort} sortBy={sortBy} sortValue={sortValue} />
+            <ConTrol />
             <div className="row mt-15">
               <TaskList onUpdateStatus={this.onUpdateStatus} onUpdate={this.onUpdate}/>
             </div>
