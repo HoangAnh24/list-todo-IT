@@ -57,3 +57,10 @@ export const filterTask = (filter) => {
     filter
   }
 }
+
+export const searchTask = (keysearch) => {
+  return {
+    type : types.SEARCH_TABLE,
+    keysearch
+  }
+}

@@ -28,7 +28,7 @@ class TaskList extends Component {
     }
 
     render() {
-        let { listTasks, filterTable } = this.props;
+        let { listTasks, filterTable, keySearch } = this.props;
         if(filterTable.name) {
             listTasks = listTasks.filter((task) => {
             return task.name.toLowerCase().indexOf(filterTable.name) !== -1;
@@ -42,6 +42,13 @@ class TaskList extends Component {
             return task.status === (filterTable.status === 1 ? true : false);
             }
         });
+
+        // search keyword
+        if(keySearch) {
+            listTasks = listTasks.filter((task) => {
+            return task.name.toLowerCase().indexOf(keySearch.toLowerCase()) !== -1;
+          });
+        }
 
         let itemTask = listTasks.map((task, index) => {
             return <ItemList key={index} task={task} index={index} onUpdate={this.props.onUpdate} />;
@@ -85,7 +92,8 @@ class TaskList extends Component {
 const mapStateToProps = (state) => {
   return {
       listTasks : state.tasks,
-      filterTable: state.filterTable
+      filterTable: state.filterTable,
+      keySearch: state.search
   }
 };
 
